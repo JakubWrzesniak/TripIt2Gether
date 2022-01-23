@@ -1,0 +1,58 @@
+@model IEnumerable<TripIt2Gether.Models.Trip>
+
+@{
+    ViewData["Title"] = "Wycieczki";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@foreach (var item in Model) {
+<div class="row">
+    <div class="col-3">
+        @if (item.Image != null)
+        {
+<img class="img-thumbnail" src="~/Uploads/@item.Image"
+     asp-append-version="true" />}
+    </div>
+    <div class="col-2">
+        @Html.DisplayFor(modelItem => item.Name)
+    </div>
+    <div class="col-2">
+        @Html.DisplayFor(modelItem => item.StartDate)
+    </div>
+    <div class="col-2">
+        @Html.DisplayFor(modelItem => item.EndDate)
+    </div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("TourOperator"))
+    {
+<div class="col-1">
+    @(item.Applications != null ? @item.Applications.Count : 0) / @Html.DisplayFor(modelItem => item.MaxNumberOfParticipants)
+</div>
+                    <div class="col-1">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </div>}
+    @if (User.Identity.IsAuthenticated && User.IsInRole("TourOperator"))
+    {
+<div class="col-1">
+    <a id="@($"Edit_{@item.TripNumber}")" asp-action="Edit" asp-route-id="@item.TripNumber">Edit</a> |
+    <a id="@($"Details_{@item.TripNumber}")" asp-action="Details" asp-route-id="@item.TripNumber">Details</a> |
+    <a id="@($"Delete_{@item.TripNumber}")" asp-action="Delete" asp-route-id="@item.TripNumber">Delete</a>
+</div> }
+                else
+                {
+
+@if (item.Applications.Select(s => s.Participant.Email).Contains(User.Identity.Name))
+{
+<div class="col-1">
+    <p class="text-secondary">Apply</p>
+</div>}
+else
+{
+<div class="col-1">
+    <a id="@($"apply_{@item.TripNumber}")" asp-action="ShowPreviewData" asp-controller="Applications" asp-route-id="@item.TripNumber">Apply</a>
+</div>}
+    }
+</div>}

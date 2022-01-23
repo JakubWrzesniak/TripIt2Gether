@@ -1,0 +1,36 @@
+@model IEnumerable<TripIt2Gether.Models.Application>
+
+@{ ViewData["Title"] = "Index"; }
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@foreach (var item in Model)
+{
+<div class="row border border-info p-3">
+    <div class="col-3">
+        <div>
+            @Html.DisplayFor(modelItem => item.Participant.Name) @Html.DisplayFor(modelItem => item.Participant.Surname)
+        </div>
+        <div>
+            @Html.DisplayFor(modelItem => item.Participant.Email)
+        </div>
+    </div>
+    <div class="col-4">
+        <div>
+            @Html.DisplayFor(modelItem => item.Trip.Name)
+        </div>
+        <div>
+            @Html.DisplayFor(modelItem => item.Trip.StartDate) - @Html.DisplayFor(modelItem => item.Trip.EndDate)
+        </div>
+    </div>
+    <div class="col-3">
+        @Html.DisplayFor(modelItem => item.Status)
+    </div>
+    <div class="col-2">
+        @Html.ActionLink("Szczegóły", "Edit", new { tripId = item.TripId, userId = item.UserId })
+    </div>
+</div>
+}

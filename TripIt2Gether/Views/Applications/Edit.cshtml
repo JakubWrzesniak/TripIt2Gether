@@ -1,0 +1,130 @@
+@model TripIt2Gether.Models.Application
+
+@{
+    ViewData["Title"] = "Edit";
+
+}
+
+<h1>Edit</h1>
+
+<h4>Application</h4>
+<hr />
+@if(TempData["ErrorMessage"] != null || TempData["UnverifyUser"] != null)
+            {
+                <div class="row justify-content-md-center mt-5 mb-5">
+                    <div class="col-8 bg-danger text-center ext-light">
+                        <h3 class="p-2">
+                            @(TempData["ErrorMessage"] ?? TempData["UnverifyUser"])
+                        </h3>
+                    </div>
+                </div>
+            }
+    <div class="row">
+        <div class="col-3">
+            @if (Model.Trip.Image != null)
+            {
+        <img class="img-thumbnail" src="~/Uploads/@Model.Trip.Image"
+             asp-append-version="true" />}
+            </div>
+        <div class="col-9">
+            <div class="row">
+                <h3 class="col-4">
+                    @Html.DisplayFor(model => model.Trip.Name)
+                </h3>
+                <h4 class="col-4">
+                    @Html.DisplayFor(model => model.Trip.StartDate) - @Html.DisplayFor(model => model.Trip.EndDate)
+                </h4>
+                <h4 class="col-4">
+                    @Html.DisplayFor(model => model.Trip.Cost) PLN
+                </h4>
+            </div>
+            <div class="row">
+                <p class="col-12">
+                    @Html.DisplayFor(model => model.Trip.Description)
+                </p>
+            </div>
+        </div>
+    </div>
+    <form asp-action="Edit">
+        <div class="row mt-5">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="offset-1 col-md-5">
+                <input type="hidden" asp-for="TripId" />
+                <input type="hidden" asp-for="UserId" />
+                <div class="form-group row  bg-dark text-light">
+                    <label asp-for="Participant.Name" class="control-label col-form-label col-3"></label>
+                    <div class="col-9">
+                        <input asp-for="Participant.Name" class="form-control-plaintext text-light" disabled />
+                    </div>
+                </div>
+                <div class="form-group row bg-dark text-light">
+                    <label asp-for="Participant.Surname" class="control-label col-form-label col-3"></label>
+                    <div class="col-9">
+                        <input asp-for="Participant.Surname" class="form-control-plaintext text-light" disabled />
+                    </div>
+                </div>
+                <div class="form-group row bg-dark text-light">
+                    <label asp-for="Participant.DateOfBirth" class="control-label col-form-label col-3"></label>
+                    <div class="col-9">
+                        <input asp-for="Participant.DateOfBirth" class="form-control-plaintext text-light" disabled />
+                    </div>
+                </div>
+                <div class="form-group row bg-dark text-light">
+                    <label asp-for="Participant.Email" class="control-label col-form-label col-3"></label>
+                    <div class="col-9">
+                        <input asp-for="Participant.Email" class="form-control-plaintext text-light" disabled />
+                    </div>
+                </div>
+                <div class="form-group row bg-dark text-light">
+                    <label asp-for="Participant.PhoneNumber" class="control-label col-form-label col-3"></label>
+                    <div class="col-9">
+                        <input asp-for="Participant.PhoneNumber" class="form-control-plaintext text-light" disabled />
+                    </div>
+                </div>
+                <div class="form-group row bg-dark text-light">
+                    <label asp-for="Participant.IsVerified" class="control-label col-3"></label>
+                    <div class="col-9">
+                        <input type="checkbox" name="IsVerified" value="true" @(Model.Participant.IsVerified ? " checked " : "") asp-route-id="IsVerified" id="IsVerified" class="text-light" />
+                        <input name="IsVerified" type="hidden" value="false" />
+                    </div>
+                </div>
+                </div>
+            <div class="col-md-6">
+                @foreach (var answer in Model.Answers)
+                {
+        <div class="form-group">
+            <label asp-for="@answer" class="control-label">@answer.Question.Content</label>
+            <input id="answear[@answer.QuestionId]" name="question[@answer.QuestionId]" value="@answer.Content" class="form-control" disabled />
+        </div>}
+                <div class="form-group">
+                    <label asp-for="AdditionInformation" class="control-label"></label>
+                    <textarea rows="5" asp-for="AdditionInformation" class="form-control" disabled></textarea>
+                </div>
+                <div class="form-group">
+                    @if (Model.Status != ParticipationStatus.Anulowana)
+                    {
+                <button type="submit" bind-Value="ParticipationStatus" asp-action="Edit" name="participationStatus" value="@ParticipationStatus.Anulowana" id="participationStatus" class="btn btn-danger" OnClick="return confirm('Czy na pewno chcesz odrzucić zgłoszenie?')">Odrzuć</button>
+            }
+            else
+            {
+                <button disabled class="btn btn-danger">Odrzuć</button>
+            }
+                    @if (Model.Status != ParticipationStatus.Zaakaceptowana && TempData["ErrorMessage"] != null)
+                    {
+                <button type="submit" bind-Value="ParticipationStatus" asp-action="Edit" name="participationStatus" value="@ParticipationStatus.Zaakaceptowana" id="participationStatus" class="btn btn-success">Zaakceptuj</button> }
+                            else
+                            {
+                <button disabled class="btn btn-success">Zaakceptuj</button>}
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,73 @@
+@model TripIt2Gether.Models.Application
+
+@{
+    ViewData["Title"] = "Uzupełnij niezbędne informacje";
+}
+
+<h1>Niezbędne informacje</h1>
+
+<h4>Wniosek o udział w wycieczce</h4>
+<hr />
+<div class="row">
+        <div class="col-3">
+            @if (Model.Trip.Image != null)
+            {
+                    <img class="img-thumbnail" src="~/Uploads/@Model.Trip.Image"
+                         asp-append-version="true" />
+        }
+        </div>
+        <div class="col-9">
+            <div class="row">
+                <h3 class="col-4">
+                    @Html.DisplayFor(model => model.Trip.Name)
+                </h3>
+                <h4 class="col-4">
+                    @Html.DisplayFor(model => model.Trip.StartDate) - @Html.DisplayFor(model => model.Trip.EndDate)
+                </h4>
+                <h4 class="col-4">
+                    @Html.DisplayFor(model => model.Trip.Cost)
+                </h4>
+            </div>
+            <div class="row">
+                <p class="col-12">
+                    @Html.DisplayFor(model => model.Trip.Description)
+                </p>
+            </div>
+        </div>
+</div>
+    <div class="row">
+        <div class="col-10">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="TripId" />
+                <input type="hidden" asp-for="UserId" />
+                <input type="hidden" asp-for="Price" value="@Model.Trip.Cost"/>
+                @if(@Model.Trip.Form != null) {
+                @foreach (var question in Model.Trip.Form.Questions)
+                {
+                    <div class="form-group">
+                        <label for="question[@question.QuestionId]" class="control-label">@question.Content</label>
+                        <textarea row="5" id="question[@question.QuestionId]" name="question[@question.QuestionId]" class="form-control"></textarea>
+                        <span asp-validation-for="Answers" class="text-danger"></span>
+                    </div>
+                 }
+                }
+                <div class="form-group">
+                    <label asp-for="AdditionInformation" class="control-label"></label>
+                    <textarea row="5" asp-for="AdditionInformation" class="form-control"></textarea>
+                    <span asp-validation-for="AdditionInformation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Applay" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+</div>
+
+<div>
+    <a asp-action="ShowPreviewData" asp-controller="Applications" asp-route-id="@Model.TripId">Back to preview data</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

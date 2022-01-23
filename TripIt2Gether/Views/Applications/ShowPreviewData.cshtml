@@ -1,0 +1,99 @@
+﻿@model TripIt2Gether.ViewModels.ApplicationPreviewDataViewModel
+
+@{
+    ViewData["Title"] = "Przegląd danych";
+}
+
+<h1>Przegląd danych</h1>
+
+<div>
+    <h4>Wniosek o udział w wycieczce</h4>
+    <hr />
+    <div class="row">
+        <div class="col-3">
+            @if (ViewBag.Image != null)
+            {
+                <img class="img-thumbnail" src="~/Uploads/@ViewBag.Image"
+                     asp-append-version="true" />
+            }
+        </div>
+        <div class="col-9">
+            <div class="row">
+                <h3 class="col-4">
+                    @ViewBag.TripName
+                </h3>
+                <h4 class="col-4">
+                    @(((DateTime)ViewBag.StartDate).ToString("dd.MM.yyyy")) - @(((DateTime)ViewBag.EndDate).ToString("dd.MM.yyyy"))
+                </h4>
+                <h4 class="col-4">
+                    @ViewBag.Cost
+                </h4>
+            </div>
+            <div class="row">
+                <p class="col-12">
+                    @ViewBag.Description
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h2>
+                Niezbędne informacje:
+            </h2>
+            <p>Twoje dane</p>
+        </div>
+    </div>
+   
+    <div class="row">
+        <div class="col-10">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="TripNumber" />
+                <input type="hidden" asp-for="userId" />
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" readonly />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="Surname"></label>
+                        <input asp-for="Surname" class="form-control" readonly />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="Address"></label>
+                        <input asp-for="Address" class="form-control" readonly />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="DateOfBirth"></label>
+                        <input asp-for="DateOfBirth" class="form-control" readonly />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" readonly />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control" readonly />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <a class="btn btn-warning" href=@($"/Identity/Account/Manage/?TripId={@Model.TripNumber}")>Edit Your Data</a>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
