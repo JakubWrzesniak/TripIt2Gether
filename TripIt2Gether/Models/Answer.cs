@@ -15,7 +15,7 @@ namespace TripIt2Gether.Models
         public string TripNumber { get; set; }
 
         [Required]
-        [MaxLength(450)]
+        [StringLength(455, MinimumLength = 5, ErrorMessage = "Odpowiediź powinna zawierać od 5 do 455 znaków")]
         public string Content { get; set; }
 
         public Question Question { get; set; }

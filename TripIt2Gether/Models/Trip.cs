@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
+using TripIt2Gether.CustomValidation;
 
 namespace TripIt2Gether.Models
 {
@@ -11,6 +13,7 @@ namespace TripIt2Gether.Models
         [Key]
         [Display(Name = "Trip Number")]
         [MaxLength(50)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string TripNumber { get; set; }
 
         [Required]
@@ -20,10 +23,13 @@ namespace TripIt2Gether.Models
 
         [Required]
         [Display(Name = "Start Date")]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
         [Required]
         [Display(Name = "End Date")]
+        [StartDateBeforeEndDate]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
         [Display(Name = "Maximum number of participants")]
@@ -31,23 +37,28 @@ namespace TripIt2Gether.Models
         public int MaxNumberOfParticipants { get; set; }
 
         [Required]
-        [Display(Name = "Maximum number of participants")]
-        public TripStatus Status { get; set; }
+        [Display(Name = "Status")]
+        public TripStatus Status { get; set; } = TripStatus.Projekt;
+
+        [Required]
+        [Range(0.01, 1000000)]
+        public double Cost { get; set; }
+
+        [Required]
+        [MaxLength(1000)]
+        public string Description { get; set; }
 
         public string Image { get; set; }
 
+        public IFormFile IFromImage { get; set; }
+
         [ForeignKey("Form")]
-        public int FormId { get; set; }
+        public int? FormId { get; set; }
 
         public Form Form { get; set; }
 
         public ICollection<Application> Applications {get; set;}
 
         public ICollection<TourOperator> TourOperators {get; set;}
-
-        public Trip()
-        {
-            Status = TripStatus.Projekt;
-        }
     }
 }

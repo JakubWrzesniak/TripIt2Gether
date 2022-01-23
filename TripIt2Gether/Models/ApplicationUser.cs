@@ -27,9 +27,5 @@ namespace TripIt2Gether.Models
 
         [MaxLength(255)]
         public override string Id { get => base.Id; set => base.Id = value; }
-
-        public ApplicationUser()
-        {
-        }
     }
 }

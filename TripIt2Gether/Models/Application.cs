@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using TripIt2Gether.ViewModels;
 
 namespace TripIt2Gether.Models
 {
@@ -17,7 +18,8 @@ namespace TripIt2Gether.Models
         [MaxLength(455)]
         public string AdditionInformation { get; set; }
 
-        public bool IsPaid { get; set; }
+        [Required]
+        public bool IsPaid { get; set; } = false;
 
         [Required]
         [Range(0.01, 100000)]
@@ -26,9 +28,11 @@ namespace TripIt2Gether.Models
         [Required]
         public DateTime AddedDate { get; set; }
 
-        public ParticipationStatus Status { get; set; }
+        [Required]
+        public ParticipationStatus Status { get; set; } = ParticipationStatus.OczekujacaPotiwerdzenia;
 
-        public ICollection<Answer> Answers { get; set; }
+
+        public ICollection<Answer> Answers { get; set; } = new List<Answer>();
 
         public Trip Trip { get; set; }
 
@@ -37,6 +41,11 @@ namespace TripIt2Gether.Models
         public Application()
         {
             Status = ParticipationStatus.OczekujacaPotiwerdzenia;
+        }
+
+        public bool CheckIfUserAnsweredForAllQuestions()
+        {
+            return Answers.Count == Trip.Form.Questions.Count;
         }
     }
 }

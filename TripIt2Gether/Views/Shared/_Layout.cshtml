@@ -20,15 +20,47 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Trips" asp-action="Index">Wycieczki</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (User.IsInRole("TourOperator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Applications" asp-action="Index">Zgłoszenia</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
+        @if (ViewContext.RouteData.Values["Controller"] != null && ViewContext.RouteData.Values["Controller"].ToString().Equals("Applications") && ViewContext.RouteData.Values["Action"].ToString().Equals("Index"))
+        {
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <form method="get">
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <button type="submit" id="participationStatusW" class="nav-link text-dark btn" asp-area="" asp-controller="Applications" asp-action="Index">Wszystkie zgłoszenia</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button type="submit" bind-Value="ParticipationStatus" id="participationStatusOP" value="@ParticipationStatus.OczekujacaPotiwerdzenia" name="participationStatus" class="nav-link text-dark btn" asp-area="" asp-controller="Applications" asp-action="Index">Oczekujące potwierdzenia</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button type="submit" bind-Value="ParticipationStatus" id="participationStatusZ" value="@ParticipationStatus.Zaakaceptowana" name="participationStatus" class="nav-link text-dark btn" asp-area="" asp-controller="Applications" asp-action="Index">Zaakceptowane </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button type="submit" bind-Value="ParticipationStatus" id="participationStatusA" value="@ParticipationStatus.Anulowana" name="participationStatus" class="nav-link text-dark btn" asp-area="" asp-controller="Applications" asp-action="Index">Odrzucone</button>
+                                </li>
+                                <li class="nav-item">
+                                    <select name="TripId" class="form-control" asp-for="@ViewData["SelectedTrip"]" asp-items="ViewBag.Trips">
+                                    </select>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        }
     </header>
     <div class="container">
         <main role="main" class="pb-3">

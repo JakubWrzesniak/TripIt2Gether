@@ -27,7 +27,6 @@ namespace TripIt2Gether.Data
 
             builder.Entity<Answer>(b =>
             {
-                
 
                 b.HasKey(c => new { c.QuestionId, c.ParticipantId, c.TripNumber });
 
@@ -78,10 +77,13 @@ namespace TripIt2Gether.Data
             builder.Entity<Trip>(b => {
                 b.HasOne(cs => cs.Form)
                 .WithOne(p => p.Trip)
+                .HasForeignKey<Form>(cs => cs.TripId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
                 //b.HasMany(cs => cs.Applications)
                 //.WithOne(p => p.Trip)
                 //.HasForeignKey(cs => new { cs.TripId, cs.UserId });
+                b.Ignore(cs => cs.IFromImage);
             }); 
 
             builder.Entity<Question>()
