@@ -99,7 +99,7 @@ namespace TripIt2Gether.Controllers
         }
 
 
-        // GET: Applications/Create
+        // GET: Applications/Creat
         public async Task<IActionResult> Create(string id)
         {
             Trip trip = await _context.Trips.Include(f => f.Form).Include(f => f.Form.Questions).FirstOrDefaultAsync(x => x.TripNumber == id);
@@ -216,13 +216,16 @@ namespace TripIt2Gether.Controllers
                 return View(nameof(Edit), application);
             }
 
-            application.Status = participationStatus;
-
-            if (!application.Participant.IsVerified && application.Status == ParticipationStatus.Zaakaceptowana)
+            if (!application.Participant.IsVerified && participationStatus == ParticipationStatus.Zaakaceptowana)
             {
-                TempData["UnverifyUser"] = "Użytkownik nie został Zweryfikowany";
+                TempData["ErrorMessage2"] = "Użytkownik nie został Zweryfikowany";
                 return View(nameof(Edit), application);
             }
+
+            if (!application.ChangegStatus(participationStatus))
+            {
+                TempData["ErrorMessage2"] = "Nie można zmienić statusu";
+            };
 
             if (validApplicationModel(application))
             {

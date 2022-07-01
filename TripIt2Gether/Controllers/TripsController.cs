@@ -29,14 +29,15 @@ namespace TripIt2Gether.Models
         }
 
         // GET: Trips
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var applicationDbContext = _context.Trips.Include(t => t.Form).Include(s => s.Applications).ThenInclude(s => s != null ? s.Participant : null).Include(s => s.TourOperators);
             if (!User.IsInRole("TourOperator"))
             {
-                return View(await applicationDbContext.Where(s => s.Status == TripStatus.Aktywna).ToListAsync());
+                var trips = applicationDbContext.Where(s => s.Status == TripStatus.Aktywna).ToList();
+                return View(trips.Where(c => c.Applications.Where(w => w.Status == ParticipationStatus.Zaakaceptowana).ToList().Count < c.MaxNumberOfParticipants).ToList());
             }
-            return View(await applicationDbContext.Where(s => s.TourOperators.Select(s => s.OperatorId).Contains(User.FindFirstValue(ClaimTypes.NameIdentifier))).ToListAsync());
+            return View(applicationDbContext.Where(s => s.TourOperators.Select(s => s.OperatorId).Contains(User.FindFirstValue(ClaimTypes.NameIdentifier))).ToList());
         }
 
         // GET: Trips/Details/5

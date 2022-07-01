@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TripIt2Gether.CustomValidation;
 using TripIt2Gether.Models;
 
 namespace TripIt2Gether.Areas.Identity.Pages.Account.Manage
@@ -50,6 +51,7 @@ namespace TripIt2Gether.Areas.Identity.Pages.Account.Manage
 
             [DataType(DataType.Date)]
             [Display(Name = "Date of Birth")]
+            [DateBeforeToday]
             public DateTime DateOfBirth { get; set; }
 
             [DataType(DataType.Text)]

@@ -16,6 +16,7 @@ namespace TripIt2Gether.Models
         public string UserId { get; set; }
 
         [MaxLength(455)]
+        [Required]
         public string AdditionInformation { get; set; }
 
         [Required]
@@ -45,7 +46,39 @@ namespace TripIt2Gether.Models
 
         public bool CheckIfUserAnsweredForAllQuestions()
         {
-            return Answers.Count == Trip.Form.Questions.Count;
+            return Answers.Count >= Trip.Form.Questions.Count;
+        }
+
+        public bool ChangegStatus(ParticipationStatus newStatus) {
+            switch (Status)
+            {
+                
+                case ParticipationStatus.OczekujacaPotiwerdzenia:
+                    if(newStatus.Equals(ParticipationStatus.Zaakaceptowana) || newStatus.Equals(ParticipationStatus.Anulowana))
+                    {
+                        this.Status = newStatus;
+                        return true;
+                    }
+                    return false;
+                case ParticipationStatus.Zaakaceptowana:
+                    if (newStatus.Equals(ParticipationStatus.Anulowana) || newStatus.Equals(ParticipationStatus.Odbyta) || newStatus.Equals(ParticipationStatus.NieZrealizowana))
+                    {
+                        this.Status = newStatus;
+                        return true;
+                    }
+                    return false;
+                case ParticipationStatus.Anulowana:
+                    if (newStatus.Equals(ParticipationStatus.Zaakaceptowana))
+                    {
+                        this.Status = newStatus;
+                        return true;
+                    }
+                    return false;
+                case ParticipationStatus.Odbyta:
+                case ParticipationStatus.NieZrealizowana:
+                default:
+                    return false;
+            }
         }
     }
 }

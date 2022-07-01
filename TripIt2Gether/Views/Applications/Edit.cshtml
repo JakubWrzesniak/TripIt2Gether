@@ -1,20 +1,19 @@
 @model TripIt2Gether.Models.Application
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Szczegóły aplikacji";
 
 }
 
-<h1>Edit</h1>
+<h1>Szczegóły aplikacji</h1>
 
-<h4>Application</h4>
 <hr />
-@if(TempData["ErrorMessage"] != null || TempData["UnverifyUser"] != null)
+@if(TempData["ErrorMessage"] != null || TempData["ErrorMessage2"] != null)
             {
                 <div class="row justify-content-md-center mt-5 mb-5">
-                    <div class="col-8 bg-danger text-center ext-light">
-                        <h3 class="p-2">
-                            @(TempData["ErrorMessage"] ?? TempData["UnverifyUser"])
+                    <div class="col-8 alert alert-danger alert-dismissible text-center">
+                        <h3>
+                            @(TempData["ErrorMessage"] ?? TempData["ErrorMessage2"])
                         </h3>
                     </div>
                 </div>
@@ -96,8 +95,7 @@
             <label asp-for="@answer" class="control-label">@answer.Question.Content</label>
             <input id="answear[@answer.QuestionId]" name="question[@answer.QuestionId]" value="@answer.Content" class="form-control" disabled />
         </div>}
-                <div class="form-group">
-                    <label asp-for="AdditionInformation" class="control-label"></label>
+                <div class="form-group">                    <label asp-for="AdditionInformation" class="control-label"></label>
                     <textarea rows="5" asp-for="AdditionInformation" class="form-control" disabled></textarea>
                 </div>
                 <div class="form-group">
@@ -109,7 +107,7 @@
             {
                 <button disabled class="btn btn-danger">Odrzuć</button>
             }
-                    @if (Model.Status != ParticipationStatus.Zaakaceptowana && TempData["ErrorMessage"] != null)
+                    @if (Model.Status != ParticipationStatus.Zaakaceptowana && !TempData.ContainsKey("ErrorMessage"))
                     {
                 <button type="submit" bind-Value="ParticipationStatus" asp-action="Edit" name="participationStatus" value="@ParticipationStatus.Zaakaceptowana" id="participationStatus" class="btn btn-success">Zaakceptuj</button> }
                             else

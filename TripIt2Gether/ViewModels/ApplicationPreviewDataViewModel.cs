@@ -18,17 +18,17 @@ namespace TripIt2Gether.ViewModels
 
         public DateTime TripStartDate { get; set; }
 
-        [StringLength(40, MinimumLength = 3, ErrorMessage = " To long name, do not exceed {0}")]
+        [StringLength(40, MinimumLength = 1, ErrorMessage = "Name shoud contains between 1 and 40 signs")]
         [Required]
         public string Name { get; set; }
 
-        [StringLength(50, MinimumLength = 5, ErrorMessage = " To long Surname, do not exceed {0}")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Surname shoud contains between 1 and 40 signs")]
         [Required]
         public string Surname { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(100)]
         [Required]
-        [StringLength(50, MinimumLength = 10, ErrorMessage = " To long Address, do not exceed {0}")]
+        [StringLength(100, MinimumLength = 10, ErrorMessage = "Address shoud contains between 10 and 100 signs")]
         public string Address { get; set; }
 
         [Required]
@@ -38,7 +38,6 @@ namespace TripIt2Gether.ViewModels
 
         [Required]
         [EmailAddress]
-        [StringLength(50, MinimumLength = 5, ErrorMessage = " To long email, do not exceed {0}")]
         public string Email { get; set; }
 
         [Phone]

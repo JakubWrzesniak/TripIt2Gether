@@ -29,7 +29,7 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole("TourOperator"))
     {
 <div class="col-1">
-    @(item.Applications != null ? @item.Applications.Count : 0) / @Html.DisplayFor(modelItem => item.MaxNumberOfParticipants)
+    @(item.Applications != null ? @item.Applications.Where(s => s.Status == ParticipationStatus.Zaakaceptowana).ToList().Count : 0) / @Html.DisplayFor(modelItem => item.MaxNumberOfParticipants)
 </div>
                     <div class="col-1">
                         @Html.DisplayFor(modelItem => item.Status)
@@ -41,7 +41,7 @@
     <a id="@($"Details_{@item.TripNumber}")" asp-action="Details" asp-route-id="@item.TripNumber">Details</a> |
     <a id="@($"Delete_{@item.TripNumber}")" asp-action="Delete" asp-route-id="@item.TripNumber">Delete</a>
 </div> }
-                else
+                else if (User.Identity.IsAuthenticated)
                 {
 
 @if (item.Applications.Select(s => s.Participant.Email).Contains(User.Identity.Name))

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using TripIt2Gether.CustomValidation;
 
 namespace TripIt2Gether.Models
 {
     public class ApplicationUser : IdentityUser
     {
-
+        [DateBeforeToday]
         public DateTime DateOfBirth { get; set; }
 
         [MaxLength(40, ErrorMessage = " To long name, do not exceed {0}")]
